@@ -20,8 +20,8 @@ import net.sf.libgrowl.Notification;
 
 public class NotifyMessage extends Message {
 
-  public NotifyMessage(final Notification notification) {
-    super(IProtocol.MESSAGETYPE_NOTIFY);
+  public NotifyMessage(final Notification notification, final String password) {
+    super(IProtocol.MESSAGETYPE_NOTIFY, password);
 
     // application name, required
     header(IProtocol.HEADER_APPLICATION_NAME, notification.getApplication()

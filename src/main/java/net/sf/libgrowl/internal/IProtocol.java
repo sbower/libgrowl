@@ -29,6 +29,10 @@ public interface IProtocol {
    */
   static final String ENCRYPTION_NONE = "NONE";
   /**
+   * md5 kasy hash
+   */
+  static final String KEY_HASH_MD5 = "MD5";
+  /**
    * GNTP version
    */
   static final String GNTP_VERSION = "GNTP/1.0";

@@ -17,7 +17,30 @@ public class GNTPTest {
      */ 
     @Before 
     public void setUp() { 
-        emptyList = new java.util.ArrayList(); 
+     emptyList = new java.util.ArrayList(); 
+
+     // connect to Growl on the given host
+     GrowlConnector growl = new GrowlConnector("10.0.1.12");
+     growl.setPassword("test");
+     
+     // give your application a name and icon (optionally)
+     Application downloadApp = new Application("Downloader", "http://example.com/icon.png");
+
+     // create reusable notification types, their names are used in the Growl settings
+     NotificationType downloadStarted = new NotificationType("Download started", "http://example.com/icon.png");
+     NotificationType downloadFinished = new NotificationType("Download finished", "http://example.com/icon.png");
+     NotificationType[] notificationTypes = new NotificationType[] { downloadStarted, downloadFinished };
+
+     // now register the application in growl
+     growl.register(downloadApp, notificationTypes);
+
+     // create a notification with specific title and message
+     Notification ubuntuDownload = new Notification(downloadApp, downloadStarted, "Ubuntu 9.4", "654 MB");
+
+     // finally send the notification
+     growl.notify(ubuntuDownload);
+
+
     } 
 
 
@@ -40,6 +63,5 @@ public class GNTPTest {
     public void testForException() { 
         Object o = emptyList.get(0); 
     } 
-
 
 }

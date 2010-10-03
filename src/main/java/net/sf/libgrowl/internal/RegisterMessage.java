@@ -22,8 +22,8 @@ import net.sf.libgrowl.NotificationType;
 public class RegisterMessage extends Message {
 
   public RegisterMessage(final Application application,
-      final NotificationType[] notificationTypes) {
-    super(IProtocol.MESSAGETYPE_REGISTER);
+      final NotificationType[] notificationTypes, final String password) {
+    super(IProtocol.MESSAGETYPE_REGISTER, password);
 
     // application name, required
     header(HEADER_APPLICATION_NAME, application.getName());

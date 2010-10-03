@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package net.sf.libgrowl.internal;
 
 import java.io.BufferedReader;
@@ -63,10 +64,19 @@ public abstract class Message implements IProtocol {
    */
   private static String PLATFORM_NAME = System.getProperty("os.name");
 
-  protected Message(final String messageType) {
+  protected Message(final String messageType, String password) {
     mBuffer = new StringBuilder();
-    mBuffer.append(IProtocol.GNTP_VERSION).append(' ').append(messageType)
+    
+    if (password.equals("")) {
+        mBuffer.append(IProtocol.GNTP_VERSION).append(' ').append(messageType)
         .append(' ').append(IProtocol.ENCRYPTION_NONE).append(IProtocol.LINE_BREAK);
+    } else {
+        mBuffer.append(IProtocol.GNTP_VERSION).append(' ').append(messageType)
+        .append(' ').append(IProtocol.ENCRYPTION_NONE).append(' ')
+        .append(IProtocol.KEY_HASH_MD5).append(':').append(Encryption.generateKeyHash(password))
+        .append(IProtocol.LINE_BREAK);
+    }
+
     header(HEADER_ORIGIN_MACHINE_NAME, MACHINE_NAME);
     header(HEADER_ORIGIN_SOFTWARE_NAME, "libgrowl");
     header(HEADER_ORIGIN_SOFTWARE_VERSION, "0.1");

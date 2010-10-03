@@ -50,7 +50,7 @@ import net.sf.libgrowl.internal.RegisterMessage;
  * </code>
  * </p>
  * 
- * @author Bananeweizen
+ * @author Bananeweizen, sbower
  * 
  */
 public class GrowlConnector {
@@ -58,7 +58,8 @@ public class GrowlConnector {
   private String mHost;
   private int mPort;
   private ArrayList<NotificationType> mRegisteredNotifications = new ArrayList<NotificationType>();
-
+  private String mPassword = "";
+  
   /**
    * create a growl connection to localhost, port 23053
    */
@@ -104,16 +105,26 @@ public class GrowlConnector {
    *          all notification types supported by your application
    * @return response, see {@link IResponse}
    */
+ 
   public final int register(final Application application,
       final NotificationType[] notificationTypes) {
-    final Message message = new RegisterMessage(application, notificationTypes);
+    final Message message = new RegisterMessage(application, notificationTypes, mPassword);
     final int result = message.send(mHost, mPort);
     if (result == IResponse.OK) {
       setNotificationsRegistered(notificationTypes);
     }
     return result;
   }
-
+  /**
+   * remember the registered notification types internally to detect wrong usage
+   * of the {@link GrowlConnector#notify(Notification)} method
+   * 
+   * @param notificationTypes
+   */
+  public void setPassword(String password) {
+	  this.mPassword = password;
+  }
+  
   /**
    * remember the registered notification types internally to detect wrong usage
    * of the {@link GrowlConnector#notify(Notification)} method
@@ -144,7 +155,7 @@ public class GrowlConnector {
           + notification.getNotificationType().getDisplayName()
           + " before using it in notifications.");
     }
-    final Message message = new NotifyMessage(notification);
+    final Message message = new NotifyMessage(notification, mPassword);
     return message.send(mHost, mPort);
   }
  
