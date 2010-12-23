@@ -14,7 +14,7 @@
       <email>shawn.bower@gmail.com</email>
     </developer>
   </developers>
-  
+      
   <build>
     <plugins>
       <plugin>
@@ -22,6 +22,13 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.0-beta-9</version>
       </plugin>
+      <plugin>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<configuration>
+				<source>1.5</source>
+				<target>1.5</target>
+			</configuration>
+		</plugin>
     </plugins>
   </build>
   
