@@ -20,6 +20,7 @@ import java.io.File;
 
 import javax.swing.ImageIcon;
 
+import net.sf.libgrowl.internal.IPriority;
 import net.sf.libgrowl.internal.Icon;
 import net.sf.libgrowl.internal.ResourceIcon;
 import net.sf.libgrowl.internal.UrlIcon;
@@ -40,6 +41,7 @@ public class Notification {
   private Icon mIcon;
   private int mPriority = IPriority.NORMAL;
   private boolean mSticky = false;
+  private String mUrl;
 
   /**
    * Create a new notification of the given notification type for the given
@@ -249,4 +251,25 @@ public class Notification {
   public void setSticky(final boolean sticky) {
     mSticky = sticky;
   }
+  
+  /**
+   * Indicates if the notification should remain displayed until dismissed by
+   * the user (default false).
+   * 
+   * @return sticky
+   */
+  public String getCallBackURL() {
+    return mUrl;
+  }
+
+  /**
+   * Set if the notification should remain displayed until dismissed by the user
+   * (default: non sticky).
+   * 
+   * @param sticky
+   */
+  public void setCallBackURL(final String url) {
+    mUrl = url;
+  }
+  
 }

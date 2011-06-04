@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.sf.libgrowl;
+package net.sf.libgrowl.internal;
 
 /**
  * response of a Growl request
@@ -32,5 +32,13 @@ public interface IResponse {
    * an error occurred
    */
   static final int ERROR = 1;
+  /**
+   * an error occurred
+   */
+  static final int CALLBACK = 2;
+  
+  public int getStatus();
+  
+  public String getResponseAction();
 
 }

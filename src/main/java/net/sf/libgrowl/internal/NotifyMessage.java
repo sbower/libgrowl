@@ -57,11 +57,11 @@ public class NotifyMessage extends Message {
     if (icon != null) {
       icon.header(IProtocol.HEADER_NOTIFICATION_ICON, this);
     }
-    /*
-     * // optional callback final String callbackId =
-     * notification.getCallbackId(); if (callbackId != null) {
-     * header(IProtocol.HEADER_NOTIFICATION_CALLBACK_ID, callbackId); }
-     */
+    
+    final String callBackUrl = notification.getCallBackURL();
+    if (callBackUrl != null) {
+    	header(IProtocol.HEADER_NOTIFICATION_CALLBACK_TARGET, callBackUrl);
+    }
   }
 
 }

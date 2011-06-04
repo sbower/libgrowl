@@ -16,7 +16,6 @@
  */
 package net.sf.libgrowl.internal;
 
-import net.sf.libgrowl.IPriority;
 
 /**
  * @author Bananeweizen
@@ -131,9 +130,41 @@ public interface IProtocol {
    */
   static final String MESSAGETYPE_REGISTER = "REGISTER";
   /**
+   * message type SUBSCRIBE
+   */
+  static final String MESSAGETYPE_SUBSCRIBE = "SUBSCRIBE";
+  /**
+   * message type OK
+   */
+  static final String MESSAGETYPE_OK = "-OK";
+  /**
+   * message type ERROR
+   */
+  static final String MESSAGETYPE_ERROR = "-ERROR";
+  /**
+   * message type CALLBACK
+   */
+  static final String MESSAGETYPE_CALLBACK = "-CALLBACK ";
+  /**
    * Optional - A unique ID used to identify callbacks from this notification.
    */
+  static final String HEADER_RESPONSE_ACTION = "Response-Action";
   static final String HEADER_NOTIFICATION_CALLBACK_ID = "Notification-Callback-ID";
+  /**
+   * Optional - Any data (will be passed back in the callback unmodified)
+   */
+  static final String HEADER_NOTIFICATION_CALLBACK_CONTEXT = "Notification-Callback-Context";
+  /**
+   * Optional, but Required if 'Notification-Callback-Context' is passed This does not need to be of any pre-defined type, 
+   * it is only a convenience to the sending application.
+   */
+  static final String HEADER_NOTIFICATION_CALLBACK_CONTEXT_TYPE = "Notification-Callback-Context-Type";
+  /**
+   * Optional - An alternate target for callbacks from this notification. If passed, the standard behavior of 
+   * performing the callback over the original socket will be ignored and the callback data will be passed to 
+   * this target instead. 
+   */
+  static final String HEADER_NOTIFICATION_CALLBACK_TARGET = "Notification-Callback-Target";
   /**
    * default port for communication with Growl
    */

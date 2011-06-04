@@ -29,11 +29,13 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.libgrowl.IResponse;
+import net.sf.libgrowl.NotificationResponse;
+
 
 public abstract class Message implements IProtocol {
 
   private StringBuilder mBuffer;
+  private IResponse response;
 
   /**
    * container for all resources which need to be sent to Growl
@@ -107,7 +109,6 @@ public abstract class Message implements IProtocol {
   }
 
   public int send(final String host, int port) {
-    String response = null;
     try {
       writeResources();
       // always have a line break and an empty line at the message end
@@ -134,7 +135,10 @@ public abstract class Message implements IProtocol {
         buffer.append(line).append(IProtocol.LINE_BREAK);
         line = in.readLine();
       }
-      response = buffer.toString();
+      String responseString = buffer.toString();
+      
+      response = GetResponseObject(responseString);
+      
       writer.close();
       out.close();
       in.close();
@@ -148,10 +152,29 @@ public abstract class Message implements IProtocol {
 //      e.printStackTrace();
       return IResponse.ERROR;
     }
-    return getError(response);
+    return response.getStatus();
   }
 
-  /**
+  private IResponse GetResponseObject(String responseString) {
+	if (responseString.contains(IProtocol.MESSAGETYPE_CALLBACK)) {
+		return new GenericResponse(responseString);
+	} else if (responseString.contains(IProtocol.HEADER_RESPONSE_ACTION + ": " + IProtocol.MESSAGETYPE_REGISTER)) {
+		return new GenericResponse(responseString);
+	} else if (responseString.contains(IProtocol.HEADER_RESPONSE_ACTION + ": " + IProtocol.MESSAGETYPE_SUBSCRIBE)) {
+		return new GenericResponse(responseString);
+	} else if (responseString.contains(IProtocol.HEADER_RESPONSE_ACTION + ": " + IProtocol.MESSAGETYPE_NOTIFY)) {
+		return new NotificationResponse(responseString);
+	}
+	
+	return new GenericResponse();
+	  
+  }
+  
+  public IResponse getResponse() {
+	return response;
+}
+
+/**
    * write the collected resources to the output stream
    */
   private void writeResources() {
@@ -176,16 +199,6 @@ public abstract class Message implements IProtocol {
        */
       lineBreak();
     }
-  }
-
-  private int getError(final String response) {
-    if (response == null) {
-      return IResponse.ERROR;
-    }
-    if (response.contains("-OK")) {
-      return IResponse.OK;
-    }
-    return IResponse.ERROR;
   }
 
   /**

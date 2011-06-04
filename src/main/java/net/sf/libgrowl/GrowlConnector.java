@@ -19,6 +19,7 @@ package net.sf.libgrowl;
 import java.util.ArrayList;
 
 import net.sf.libgrowl.internal.IProtocol;
+import net.sf.libgrowl.internal.IResponse;
 import net.sf.libgrowl.internal.Message;
 import net.sf.libgrowl.internal.NotifyMessage;
 import net.sf.libgrowl.internal.RegisterMessage;
@@ -86,7 +87,6 @@ public class GrowlConnector {
    *          port number
    */
   public GrowlConnector(final String host, final int port) {
-    super();
     mHost = host;
     mPort = port;
   }

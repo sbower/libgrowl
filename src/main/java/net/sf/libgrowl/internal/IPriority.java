@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-package net.sf.libgrowl;
+package net.sf.libgrowl.internal;
+
+import net.sf.libgrowl.Notification;
 
 /**
  * all priorities allowed for use in the {@link Notification} type.
