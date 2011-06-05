@@ -29,14 +29,16 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.libgrowl.CallBackResponse;
 import net.sf.libgrowl.NotificationResponse;
-
+import net.sf.libgrowl.SubscribeResponse;
 
 public abstract class Message implements IProtocol {
 
   private StringBuilder mBuffer;
   private IResponse response;
-
+  private boolean callBack;
+  
   /**
    * container for all resources which need to be sent to Growl
    */
@@ -45,7 +47,7 @@ public abstract class Message implements IProtocol {
   /**
    * name of the sending machine
    */
-  private static String MACHINE_NAME;
+  protected static String MACHINE_NAME;
 
   static {
     try {
@@ -126,30 +128,41 @@ public abstract class Message implements IProtocol {
       final PrintWriter writer = new PrintWriter(out);
       writer.write(messageText);
       writer.flush();
-      System.out.println("------------------------");
-      System.out.println(messageText);
+      //System.out.println("------------------------");
+      //System.out.println(messageText);
 
-      final StringBuilder buffer = new StringBuilder();
+      StringBuilder buffer = new StringBuilder();
       String line = in.readLine();
       while (line != null && !line.isEmpty()) {
         buffer.append(line).append(IProtocol.LINE_BREAK);
         line = in.readLine();
       }
-      String responseString = buffer.toString();
       
+      String responseString = buffer.toString();      
       response = GetResponseObject(responseString);
+      //System.out.println("------------------------");
+      //System.out.println(response);
+      
+      if (isCallBack()) {
+    	  line = in.readLine();
+          while (line != null && !line.isEmpty()) {
+            buffer.append(line).append(IProtocol.LINE_BREAK);
+            line = in.readLine();
+          }
+          responseString = buffer.toString();      
+          response = GetResponseObject(responseString);
+          //System.out.println("------------------------");
+          //System.out.println(response);
+      }
       
       writer.close();
       out.close();
       in.close();
       socket.close();
-      System.out.println("------------------------");
-      System.out.println(response);
+
     } catch (UnknownHostException e) {
-//      e.printStackTrace();
       return IResponse.ERROR;
     } catch (IOException e) {
-//      e.printStackTrace();
       return IResponse.ERROR;
     }
     return response.getStatus();
@@ -157,22 +170,22 @@ public abstract class Message implements IProtocol {
 
   private IResponse GetResponseObject(String responseString) {
 	if (responseString.contains(IProtocol.MESSAGETYPE_CALLBACK)) {
-		return new GenericResponse(responseString);
+		return new CallBackResponse(responseString);
 	} else if (responseString.contains(IProtocol.HEADER_RESPONSE_ACTION + ": " + IProtocol.MESSAGETYPE_REGISTER)) {
 		return new GenericResponse(responseString);
 	} else if (responseString.contains(IProtocol.HEADER_RESPONSE_ACTION + ": " + IProtocol.MESSAGETYPE_SUBSCRIBE)) {
-		return new GenericResponse(responseString);
+		return new SubscribeResponse(responseString);
 	} else if (responseString.contains(IProtocol.HEADER_RESPONSE_ACTION + ": " + IProtocol.MESSAGETYPE_NOTIFY)) {
 		return new NotificationResponse(responseString);
 	}
 	
-	return new GenericResponse();
+	return new GenericResponse(responseString);
 	  
   }
   
   public IResponse getResponse() {
 	return response;
-}
+  }
 
 /**
    * write the collected resources to the output stream
@@ -191,7 +204,6 @@ public abstract class Message implements IProtocol {
       try {
         mBuffer.append(new String(data, "UTF-8"));
       } catch (UnsupportedEncodingException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
       /*
@@ -211,4 +223,13 @@ public abstract class Message implements IProtocol {
   protected void addResourceInternal(final String resourceId, final byte[] data) {
     mResources.put(resourceId, data);
   }
+  
+  protected void setCallBack(boolean callBack) {
+	this.callBack = callBack;
+  }
+
+  public boolean isCallBack() {
+	return callBack;
+  }
+  
 }

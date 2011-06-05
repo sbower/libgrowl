@@ -14,27 +14,26 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package net.sf.libgrowl;
 
 import net.sf.libgrowl.internal.GenericResponse;
-import net.sf.libgrowl.internal.IProtocol;
 
-public class NotificationResponse extends GenericResponse {
+public class SubscribeResponse extends GenericResponse {
+	private final String SUBSCRIPTION_TTL = "Subscription-TTL";
+	
+	private String subscriptionTTL;
+	
+	public SubscribeResponse(String responseString) {
+		super(responseString);
+		setSubscriptionTTL(getCustomHeaders().get(SUBSCRIPTION_TTL));
 		
-	private String notificationID;
-	
-	public NotificationResponse(String responseString) {
-		super(responseString);	
-		setNotificationID(getCustomHeaders().get(IProtocol.HEADER_NOTIFICATION_ID));
-	}
-	
-	private void setNotificationID(String notificationID) {
-		this.notificationID = notificationID;
 	}
 
-	public String getNotificationID() {
-		return notificationID;
+	private void setSubscriptionTTL(String subscriptionTTL) {
+		this.subscriptionTTL = subscriptionTTL;
 	}
-	
+
+	public String getSubscriptionTTL() {
+		return subscriptionTTL;
+	}
 }

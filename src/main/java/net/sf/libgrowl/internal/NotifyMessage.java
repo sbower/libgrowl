@@ -17,6 +17,7 @@
 package net.sf.libgrowl.internal;
 
 import net.sf.libgrowl.Notification;
+import java.util.UUID;
 
 public class NotifyMessage extends Message {
 
@@ -62,6 +63,14 @@ public class NotifyMessage extends Message {
     if (callBackUrl != null) {
     	header(IProtocol.HEADER_NOTIFICATION_CALLBACK_TARGET, callBackUrl);
     }
+    
+    final String context = notification.getContext();
+    final String contextType = notification.getContextType();
+    if (context != null && 
+    		contextType != null) {
+    	header(IProtocol.HEADER_NOTIFICATION_CALLBACK_CONTEXT, context);
+    	header(IProtocol.HEADER_NOTIFICATION_CALLBACK_CONTEXT_TYPE, contextType);
+    	this.setCallBack(true);
+    }
   }
-
 }

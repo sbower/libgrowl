@@ -78,7 +78,6 @@ class Encryption {
 		final byte[] result = md5.digest();
 		keyhash = md5(result);
 	} catch (NoSuchAlgorithmException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 
@@ -87,7 +86,7 @@ class Encryption {
 
   }
   
-  /**
+  /*
    * build a hex string from a byte array
    * 
    * @param password
@@ -104,8 +103,6 @@ class Encryption {
 	     .append(HEXES.charAt((b & 0x0F)));
 	}
 	return hex.toString();
-	  
-
   }
   
 }

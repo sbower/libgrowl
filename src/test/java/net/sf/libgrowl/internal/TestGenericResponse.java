@@ -1,4 +1,4 @@
-package net.sf.libgrowl;
+package net.sf.libgrowl.internal;
 
 
 import static org.junit.Assert.*;
@@ -33,5 +33,28 @@ public class TestGenericResponse {
 		assertEquals("2.0.6.1", gr.getOriginSoftwareVersion());
 		assertEquals(IResponse.OK, gr.getStatus());
 		assertEquals("6/4/2011 2:20:15 P", gr.getCustomHeaders().get("X-Timestamp"));
+		assertEquals(responseString, gr.getOriginalResponse());
+		assertEquals(responseString, gr.toString());
+
 	}
+	
+	@Test
+	public void testDefaultConstructor() {
+		GenericResponse gr = new GenericResponse();
+		assertEquals(IResponse.ERROR, gr.getStatus());
+	}
+	
+	@Test
+	public void testBadResponse() {
+		GenericResponse gr = new GenericResponse("");
+		assertEquals(IResponse.ERROR, gr.getStatus());
+		
+	}
+	
+	@Test
+	public void tesRegisterResponse() {
+		GenericResponse gr = new GenericResponse("GNTP/1.0 -OK NONE\nResponse-Action: REGISTER");
+		assertTrue(gr.isRegister());
+	}
+	
 }

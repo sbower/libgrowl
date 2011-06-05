@@ -146,9 +146,25 @@ public interface IProtocol {
    */
   static final String MESSAGETYPE_CALLBACK = "-CALLBACK ";
   /**
-   * Optional - A unique ID used to identify callbacks from this notification.
+   * Optional - Come on a response denotes the type of action
    */
   static final String HEADER_RESPONSE_ACTION = "Response-Action";
+  /**
+   * Required - A unique id (UUID) that identifies the subscriber
+   */
+  static final String HEADER_SUBSCRIBER_ID = "Subscriber-ID";
+  /**
+   * Required - The friendly name of the subscribing machine
+   */
+  static final String HEADER_SUBSCRIBER_NAME = "Subscriber-Name";
+  /**
+   * Optional - The port that the subscriber will listen for notifications on 
+   * (defaults to the standard 23053)
+   */
+  static final String HEADER_SUBSCRIBER_PORT = "Subscriber-Port";
+  /**
+   * Optional - Any data (will be passed back in the callback unmodified)
+   */
   static final String HEADER_NOTIFICATION_CALLBACK_ID = "Notification-Callback-ID";
   /**
    * Optional - Any data (will be passed back in the callback unmodified)

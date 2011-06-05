@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GenericResponse implements IResponse {
-	private final String RESPONSE_ACTION = "Response-Action";
 	private final String ORIGIN_MACHINE_NAME = "Origin-Machine-Name";
 	private final String ORIGIN_SOFTWARE_NAME = "Origin-Software-Name";
 	private final String ORIGIN_SOFTWARE_VERSION = "Origin-Software-Version";
@@ -61,10 +60,10 @@ public class GenericResponse implements IResponse {
 		} 
 		
 		for (String line : responseArray) {
-			String [] keyValuePair = line.split(": ", 2);
+			String [] keyValuePair = line.replaceAll("\r", "").split(": ", 2);
 			
 			if (2 == keyValuePair.length) {
-				if(RESPONSE_ACTION.equals(keyValuePair[0])) {
+				if(IProtocol.HEADER_RESPONSE_ACTION.equals(keyValuePair[0])) {
 					setResponseAction(keyValuePair[1]);
 				} else if(ORIGIN_MACHINE_NAME.equals(keyValuePair[0])) {
 					setOriginMachineName(keyValuePair[1]);

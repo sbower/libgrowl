@@ -23,6 +23,7 @@ import net.sf.libgrowl.internal.IResponse;
 import net.sf.libgrowl.internal.Message;
 import net.sf.libgrowl.internal.NotifyMessage;
 import net.sf.libgrowl.internal.RegisterMessage;
+import net.sf.libgrowl.internal.SubscribeMessage;
 
 /**
  * GrowlConnector is the entry point for sending notifications to Growl. Typical
@@ -60,6 +61,7 @@ public class GrowlConnector {
   private int mPort;
   private ArrayList<NotificationType> mRegisteredNotifications = new ArrayList<NotificationType>();
   private String mPassword = "";
+  private IResponse lastResponse;
   
   /**
    * create a growl connection to localhost, port 23053
@@ -113,6 +115,22 @@ public class GrowlConnector {
     if (result == IResponse.OK) {
       setNotificationsRegistered(notificationTypes);
     }
+    setLastResponse(message.getResponse());
+    return result;
+  }
+  /**
+   * subscribes your application with Growl
+   * <p>
+   * This will allow you to subscribe to all growls sent
+   * to the growl machine the message is sent to.
+   * </p>
+   * @return response, see {@link IResponse}
+   */
+ 
+  public final int subsribe() {
+    final Message message = new SubscribeMessage(mPassword);
+    final int result = message.send(mHost, mPort);
+    setLastResponse(message.getResponse());
     return result;
   }
   /**
@@ -156,14 +174,24 @@ public class GrowlConnector {
           + " before using it in notifications.");
     }
     final Message message = new NotifyMessage(notification, mPassword);
-    return message.send(mHost, mPort);
+    final int result = message.send(mHost, mPort);
+    setLastResponse(message.getResponse());
+    return result;
   }
  
   private boolean isRegistered(final NotificationType notificationType) {
     return mRegisteredNotifications.contains(notificationType);
   }
 
-  /**
+  private void setLastResponse(IResponse lastResponse) {
+	this.lastResponse = lastResponse;
+  }
+
+  public IResponse getLastResponse() {
+	return lastResponse;
+  }
+
+/**
    * command line interface to send a message to Growl. You can use this like<br>
    * <code>
    * java -jar libgrowl.jar "host" "Application name" "Notification type" "Notification title" "Notification text"

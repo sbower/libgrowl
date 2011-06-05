@@ -42,6 +42,9 @@ public class Notification {
   private int mPriority = IPriority.NORMAL;
   private boolean mSticky = false;
   private String mUrl;
+  private String mContext;
+  private String mContextType;
+  private boolean mSubscribe = false;
 
   /**
    * Create a new notification of the given notification type for the given
@@ -270,6 +273,27 @@ public class Notification {
    */
   public void setCallBackURL(final String url) {
     mUrl = url;
+  }
+  
+  public void setSubscribe(boolean mSubscribe) {
+	this.mSubscribe = mSubscribe;
+  }
+
+  public boolean isSubscribe() {
+	return mSubscribe;
+  }
+
+  public String getContext() {
+	return mContext;
+  }
+
+  public String getContextType() {
+	return mContextType;
+  }
+
+  public void setCallBackSocket(String context, String contextType) {
+	mContext = context;
+	mContextType = contextType;
   }
   
 }
